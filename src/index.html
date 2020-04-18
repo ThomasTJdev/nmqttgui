@@ -1,0 +1,98 @@
+<style>
+  input{padding: 8px!important;}
+  input[type='checkbox']{padding: 16px!important;}
+  fieldset{padding-top: 2px!important;}
+</style>
+<h2 style="text-align: center; margin: 0;">nMQTT publish</h2>
+<div>
+
+  <fieldset>
+    <legend>Broker</legend>
+    <div style="display: inline-block; vertical-align:top; width: 300px;">
+      <label>Host</label>
+      <input id="host" value="127.0.0.1" style="padding:2px;">
+      <label>Port</label>
+      <input id="port" value="1883">
+      <div style="margin-left: 5px; margin-top: 30px;">
+        <input type="checkbox" id="ssl" onclick="if(document.getElementById('port').value=='1883'){document.getElementById('port').value='8883'}else{document.getElementById('port').value='1883'}">
+        <label for="ssl">SSL</label>
+      </div>
+    </div>
+    <div style="display: inline-block; vertical-align:top;">
+      <label>Client ID</label>
+      <input id="clientid">
+      <label>Username</label>
+      <input id="username">
+      <label>Password</label>
+      <input type="password" id="password">
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Options</legend>
+    <div style="display: inline-block; margin-left: 100px; ">
+      <div style="display: inline-block; width: 45px; text-align: center;">
+        <label for="qos">QOS</label>
+        <input id="qos" value="0" style="width: 45px; text-align: center;">
+      </div>
+      <div style="display: inline-block; margin-left: 50px; vertical-align: top; text-align: center;  ">
+        <label>Retain</label>
+        <div style="width: 45px; text-align: center;">
+          <input type="checkbox" id="retain" style="display: block; margin-left: 7px; margin-top: 3px;">
+        </div>
+      </div>
+      <div style="display: inline-block; margin-left: 60px; vertical-align: top; text-align: center;  ">
+        <label>Repeat</label>
+        <div style="width: 45px; text-align: center;">
+          <input id="repeat" value="0" style=" width: 55px; text-align: center;">
+        </div>
+      </div>
+      <div style="display: inline-block; margin-left: 50px; vertical-align: top; text-align: center;  ">
+        <label>Repeat delay</label>
+        <div style="width: 45px; text-align: center;">
+          <input id="repeatdelay" value="0" style="margin-left: 15px; width: 65px; text-align: center;">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Message</legend>
+    <div>
+      <div style="display: inline-block;">
+        <div style="display: inline-block;">
+          <label for="topic">Topic</label>
+          <input id="topic" style="width: 350px;">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="payload">Payload</label>
+      <textarea id="payload"></textarea>
+    </div>
+
+    <div>
+      <button onclick='api.jsnPublish(JSON.stringify({
+        "clientid": document.querySelector("#clientid").value.trim(),
+        "host":     document.querySelector("#host").value.trim(),
+        "port":     Number(document.querySelector("#port").value.trim()),
+        "ssl":      document.querySelector("#ssl").checked,
+        "username": document.querySelector("#username").value,
+        "password": document.querySelector("#password").value,
+        "topic":    document.querySelector("#topic").value,
+        "qos":      Number(document.querySelector("#password").value),
+        "retain":   document.querySelector("#retain").checked,
+        "repeat":   Number(document.querySelector("#repeat").value),
+        "repeatdelay": Number(document.querySelector("#repeatdelay").value),
+        "payload":  document.querySelector("#payload").value,
+      }))''>Send</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Output</legend>
+    <textarea id="output" style="min-height: 150px; font-size: 12px;" readonly></textarea>
+  </fieldset>
+
+</div>
