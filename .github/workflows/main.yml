@@ -1,0 +1,61 @@
+name: Build nmqttgui
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    
+jobs:
+  # This workflow contains a single job called "build":
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Cache choosenim
+      id: cache-choosenim
+      uses: actions/cache@v1
+      with:
+        path: ~/.choosenim
+        key: ${{ runner.os }}-choosenim-1.2.0
+        
+    - name: Cache nimble
+      id: cache-nimble
+      uses: actions/cache@v1
+      with:
+        path: ~/.nimble
+        key: ${{ runner.os }}-nimble-1.2.0
+        
+    - name: Install Nim
+      if: steps.cache-choosenim.outputs.cache-hit != 'true' || steps.cache-nimble.outputs.cache-hit != 'true'
+      run: |
+        export CHOOSENIM_CHOOSE_VERSION="1.2.0"
+        curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
+        sh init.sh -y
+        
+    - name: Nimble Refresh
+      run: |
+        export PATH=$HOME/.nimble/bin:$PATH
+        nimble -y refresh
+        
+    - name: Nimble Install dependencies
+      run: |
+        export PATH=$HOME/.nimble/bin:$PATH
+        nimble -y install --depsOnly
+        
+    - name: Build project
+      run: |
+        export PATH=$HOME/.nimble/bin:$PATH
+        echo $PATH
+        nimble build -d:release -d:mingw
+        mkdir -p rel
+        mv nmqtt rel/
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: release-windows
+        path: rel
