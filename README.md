@@ -1,6 +1,6 @@
 # nmqttgui
 
-A GUI for [nmqtt](https://github.com/zevv/nmqtt).
+A GUI for [nmqtt](https://github.com/zevv/nmqtt) - a native Nim MQTT library and client.
 
 ## This is WORK IN PROGRESS.
 
