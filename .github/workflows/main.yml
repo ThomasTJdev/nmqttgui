@@ -15,8 +15,8 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
-          - macOS-latest
+          #- windows-latest
+          #- macOS-latest
         version:
           - 1.2.0
     
