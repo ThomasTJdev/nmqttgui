@@ -7,55 +7,42 @@ on:
     branches: [ master ]
     
 jobs:
-  # This workflow contains a single job called "build":
+  
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+        version:
+          - 1.2.0
+    
     steps:
     - uses: actions/checkout@v1
-      
-    - name: Cache choosenim
-      id: cache-choosenim
-      uses: actions/cache@v1
+    - uses: jiro4989/setup-nim-action@master
       with:
-        path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-1.2.0
-        
-    - name: Cache nimble
-      id: cache-nimble
-      uses: actions/cache@v1
-      with:
-        path: ~/.nimble
-        key: ${{ runner.os }}-nimble-1.2.0
-        
-    - name: Install Nim
-      if: steps.cache-choosenim.outputs.cache-hit != 'true' || steps.cache-nimble.outputs.cache-hit != 'true'
-      run: |
-        export CHOOSENIM_CHOOSE_VERSION="1.2.0"
-        curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
-        sh init.sh -y
-        
+        nim-version: ${{ matrix.version }}
+
     - name: Nimble Refresh
-      run: |
-        export PATH=$HOME/.nimble/bin:$PATH
-        nimble -y refresh
+      run: nimble -y refresh
         
     - name: Nimble Install dependencies
-      run: |
-        export PATH=$HOME/.nimble/bin:$PATH
-        nimble -n install --depsOnly
-        
+      run: nimble -n install --depsOnly
+      
     - name: Build project
       run: |
-        export PATH=$HOME/.nimble/bin:$PATH
-        echo $PATH
-        nimble build -d:release -d:mingw
+        nimble build -d:release
         mkdir -p rel
-        mv nmqtt rel/
-        
+        mv bin/nmqtt rel/nmqtt
+        mv bin/nmqtt_password rel/nmqtt_password
+        mv bin/nmqtt_pub rel/nmqtt_pub
+        mv bin/nmqtt_sub rel/nmqtt_sub
+      
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: release-windows
+        name: release-${{ matrix.os }}
         path: rel
