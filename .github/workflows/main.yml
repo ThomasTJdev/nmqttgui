@@ -44,7 +44,7 @@ jobs:
     - name: Nimble Install dependencies
       run: |
         export PATH=$HOME/.nimble/bin:$PATH
-        nimble -y install --depsOnly
+        nimble -n install --depsOnly
         
     - name: Build project
       run: |
