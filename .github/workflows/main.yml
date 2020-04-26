@@ -25,6 +25,10 @@ jobs:
     - uses: jiro4989/setup-nim-action@master
       with:
         nim-version: ${{ matrix.version }}
+        
+    - name: Foreign dep
+      run: |
+        sudo apt-get install gtk+-3.0 webkit2gtk-4.0 build-essential
 
     - name: Nimble Refresh
       run: nimble -y refresh
@@ -36,10 +40,11 @@ jobs:
       run: |
         nimble build -d:release
         mkdir -p rel
-        mv bin/nmqtt rel/nmqtt
-        mv bin/nmqtt_password rel/nmqtt_password
-        mv bin/nmqtt_pub rel/nmqtt_pub
-        mv bin/nmqtt_sub rel/nmqtt_sub
+        #mv bin/nmqtt rel/nmqtt
+        #mv bin/nmqtt_password rel/nmqtt_password
+        #mv bin/nmqtt_pub rel/nmqtt_pub
+        #mv bin/nmqtt_sub rel/nmqtt_sub
+        mv bin/nmqttgui rel/nmqttgui
       
     - name: Upload artifact
       uses: actions/upload-artifact@master
