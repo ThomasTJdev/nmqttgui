@@ -10,7 +10,7 @@ bin           = @["nmqttgui"]
 # Dependencies
 requires "nim >= 1.0.6"
 requires "webgui >= 0.6.0"
-requires "nmqtt >= 0.1.0"
+requires "nmqtt >= 1.0.1"
 
 # We are using the binaries from nmqtt, it is therefor not necessary to
 # get the code of nmqtt - the binaries are fine.
