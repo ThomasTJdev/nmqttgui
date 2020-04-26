@@ -28,6 +28,7 @@ jobs:
         
     - name: Foreign dep
       run: |
+        sudo apt update
         sudo apt-get install gtk+-3.0 webkit2gtk-4.0 build-essential
 
     - name: Nimble Refresh
